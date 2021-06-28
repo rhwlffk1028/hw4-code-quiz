@@ -1,0 +1,49 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: burlywood;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: seagreen;
+}
+
+header div {
+    margin: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-title {
+    margin: 50px 0 20px 0;
+}
+
+.intro-rule {
+    width: 50vw;
+    text-align:center;
+    margin: 0 0 20px 0;
+}
+
+.button {
+    background-color: springgreen;
+    border-radius: 10px;
+    color: brown;
+    padding: 3px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
