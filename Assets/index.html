@@ -5,27 +5,47 @@
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="stylesheet" href="style.css">
-            <title>Document</title>
+            <title>Coding Quiz Challenge</title>
         </head>
 
         <body>
 
             <header>
-                <div id="view-scoreboard" href= "scoreboard.html">
+                <a id="view-scoreboard" href= "scoreboard.html">
                     view scoreboard
-                </div>
+                </a>
 
-                <div id="timer">
-                    time: 
+                <div>
+                    <span id="timer"></span>
                 </div>
             </header>
 
-            <main>
+            <main id="main-page">
                 <h1 class="intro-title">Coding Quiz Challenge</h1>
-                <p class="intro-rule">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+                <p class="intro-rule">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by 15 seconds!</p>
                 <button class="button" id="start-quiz-btn">Start Quiz</button>
             </main>
 
+            <main id="quiz-page">
+                
+
+            </main>
+
+            <main id="result-page">
+                <h2>All done!</h2>
+                <p>Your final score is <span id="user-score"></span>.</p>
+                <form action="">
+                    <label for="initial">Enter initials: </label>
+                    <input type="text" id="initial" name="user-initial">
+                    <input type="submit" value="submit" class="button" id="submit-button">
+                </form>
+            </main>
+
+            <main id="result-status">
+                <hr>
+                <p id="result-message"></p>
+            </main>
+            
             <script src="script.js"></script>
         </body>
     </html>

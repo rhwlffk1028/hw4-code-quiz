@@ -19,6 +19,12 @@ header div {
     margin: 10px;
 }
 
+header a, header a:visited {
+    margin: 10px;
+    text-decoration: none;
+    color: black;    
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -26,7 +32,7 @@ main {
     align-items: center;
 }
 
-.intro-title {
+.intro-title, h2 {
     margin: 50px 0 20px 0;
 }
 
