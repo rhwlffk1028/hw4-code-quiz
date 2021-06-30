@@ -24,7 +24,10 @@ The following tasks were completed to meet the criteria:
 
 ## Screenshot of the Website
 
-![screenshot of index.html]()
+![screenshot of main page](./Assets/images/screenshot-of-main-page)
+![screenshot of quiz on-going](./Assets/images/screenshot-of-quiz-on-going)
+![screenshot of result page](./Assets/images/screenshot-of-result-page)
+![screenshot of scoreboard page](./Assets/images/screenshot-of-scoreboard)
 
 ## Links
 

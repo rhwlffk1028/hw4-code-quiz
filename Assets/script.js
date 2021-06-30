@@ -1,56 +1,27 @@
-// Create a repo, clone it down, set up basic file structure
-// root-level: assets, ReadMe.md, index.html
-
-// TODO: Create a basic html page which has a start page that includes a button to start our quiz, have a View Highscore button, and has a timer.
-
-// TODO: in our JS, we want to create questions and answers that we can iterate through to display them to the user array of object.
-
-// TODO: set up some global variables, counter, timer, score, highscores
-
-// counter will dictate where we are in our questions array. counter++;
-// timer will use set interval so that we have a functional timer that counts down, that we can decrement if the user gets an incorrect answer.
-// score save this becuase the user and their score should be saved in local storage.
-
-// when the start button is clicked, start screen to hide => timer to start => questions to show up.
-
-// use JS to change our css to tell the page based on whether we have started what shows on the screen.
-// set up the timer so that it runs on the start of the game.
-// click handler on the start button.
-// start the timer => make sure that the quiz ends at 0 seconds.
-// change the css on all of the required html elements so that we get what we want on the page.
-// display the first object in the array on the page.
-// set up click handlers on the answer buttons so that when a user selects and answer, we can check a few things.
-// check if the answer is right or wrong => increment to the next question => on the page if we are at the end of our array we want to end the quiz => incorrect answer decrement time, increment counter
-// show the user if they got the question correct or incorrect underneath the answers => use set timeout to change classes to show the user right or wrong
-// at the end of the quiz hide the questions and how the user their score (created this var earlier), use the score and the user initials to save that information in local storage
-// [user: name, score: 10] each time we pull the information from local storage we set our highscores to either the info their || [];
-// hide the user input screen and show the high scores to the user then if they wnat to take the quiz again.
-
+// Global Variables.
 var timeDisplay = document.querySelector("#timer");
 var startBtn = document.querySelector("#start-quiz-btn")
 var mainPage = document.querySelector("#main-page");
 var quizPage = document.querySelector("#quiz-page");
 var resultStatus = document.querySelector("#result-status");
-var resultStatusMessage = document.querySelector("result-message");
+var resultStatusMessage = document.querySelector("#result-message");
 var resultPage = document.querySelector("#result-page");
 var userScore = document.querySelector("#user-score");
 var userInitial = document.querySelector("#user-initial");
 var submitBtn = document.querySelector("#submit-button");
 
-// initial state (visible/hidden) of the main, quiz, result page, and result message.
-var mainPageState = mainPage.getAttribute("data-state");
-var quizPageState = quizPage.getAttribute("data-state");
-var resultPageState = resultPage.getAttribute("data-state");
-var resultStatusState = resultStatus.getAttribute("data-state");
-
-var questionsArrIndex = 0; //tracks the index of an object inside the array.
-var counter = 0;
-var score = 0;
-var timeLeft = 75;
-var resultMessageTime = 1;
+// Tracks the index of an object inside the array.
+var questionsArrIndex = 0; 
+// Initial time decleration.
+var timeLeft = 100;
+// Duration for result message to display.
+var resultMessageTime = 2;
+// When user gets incorrect answer, there is 15 seconds penalty.
 var penalty = 15;
+// This is declared so that during the quiz, endOfQuiz is false but when the criteria is fulfilled to end the quiz, this changes to true.
 var endOfQuiz = false;
 
+// Array of objects for questions and answers.
 var questionsArr = [
     {
         question: "Commonly used data types DO NOT inlcudes:",
@@ -79,25 +50,15 @@ var questionsArr = [
     },
 ]
 
-
-// Pseudo Coding
-// TODO: clicking the "start-quiz" starts the game and shows the first page.
-
-
-
-// TODO: As soon as the "Start Quiz" button is clicked, the timer starts with "75" seconds.
-
-// timer function
-
-
-
+// This function activates when user clicks the 'start quiz' button and hide the main page. Then the timer starts and show the first question. 
 function startQuiz() {  
-    mainPage.hidden = true;
+    mainPage.hidden = "true";
     timer();
     // shows the first question when "start quiz" button is clicked.
     questionShow(0);
 }
 
+// Timer function.
 function timer() {
     var timerInterval = setInterval(function() {
         timeLeft--;
@@ -105,25 +66,26 @@ function timer() {
 
         if (timeLeft === 0 || endOfQuiz === true) {
             clearInterval(timerInterval);
+            quizDone();
         }
     },1000);
 }
 
-
+// This function allows to create a question and answer choices (buttons) based on which problem the user is currently at.
 function questionShow (questionNum) {
     quizPage.innerHTML = "";
 
-    // pulls out questions from array and show.
+    // Pulls out questions from array and show.
     var h2Tags = document.createElement("h2");
     quizPage.appendChild(h2Tags);
     h2Tags.textContent = questionsArr[questionNum].question;
 
-    // creates unordered list with no style.
+    // Creates unordered list with no style.
     var listEl = document.createElement("ul");
-    listEl.setAttribute("style", "list-style-type: none; text-align: left;")
+    listEl.setAttribute("style", "list-style-type: none; text-align: ceter;")
     quizPage.appendChild(listEl);
 
-    // creates an individual list under unordered list, pulling choices option from array.
+    // Creates an individual list under unordered list, pulling choices option from array.
     for (let i = 0; i < questionsArr[questionNum].answer.length; i++) {
         var choiceList = document.createElement("li");
         listEl.appendChild(choiceList);
@@ -131,76 +93,97 @@ function questionShow (questionNum) {
         var choiceListBtn = document.createElement("button");
         choiceList.appendChild(choiceListBtn);
         choiceListBtn.textContent = questionsArr[questionNum].answer[i];
-        choiceListBtn.setAttribute("style", "background-color: springgreen; border-radius: 10px;color: brown;padding: 3px; font-weight: bold; text-align: center; text-decoration: none;font-size: 16px; cursor: pointer;")
+        // Assining the button style attribute.
+        choiceListBtn.setAttribute("style", "background-color: springgreen; border-radius: 10px;color: brown; padding: 3px; margin: 3px 0 0 3px; font-weight: bold; text-align: center; text-decoration: none;font-size: 16px; cursor: pointer;")
     }
-}
+};
 
-// Check Answer
-
+// This function takes user's choice and go through the iteration to check if the answer is correct or incorrect. Based on user's choice, the result message displays in the page. If user gets incorrect answer, there is 15 seconds of penalty in time.
 function answerVerification (choice) {
     if (choice === questionsArr[questionsArrIndex].correctAnswer) {
         var correct = true;      
         resultMessage(correct);
     } else {
         var correct = false;
-        timeLeft =- penalty;
+        timeLeft = timeLeft - penalty;
         resultMessage(correct);
-    }
-}
+    };
+};
 
-// Move to next question
-
-
-
-// Result Message
-
+// Display the result message when user picks the choice in each questions.
 function resultMessage (correct) {
-    resultStatus.style.visibility = "visible"
-
-    if (correct = true) {
-        resultStatusMessage.textContent = "Your choice is a correct answer!"
+    
+    if (correct) {
+        resultStatus.removeAttribute("hidden");
+        resultStatusMessage.textContent = "Your choice is a correct answer!";
+        resultStatusMessage.setAttribute("style", "font-weight: bolder; color: navy;")
     } else {
-        resultStatusMessage.textContent = "Your choice is an incorrect answer..."
+        resultStatus.removeAttribute("hidden");
+        resultStatusMessage.textContent = "Your choice is an incorrect answer...";
+        resultStatusMessage.setAttribute("style", "font-weight: bolder; color: navy;")
     }
-
     // timer for the result message
     var resultMessageInterval = setInterval(function () {
         resultMessageTime--;
         if (resultMessageTime === 0) {
             clearInterval(resultMessageInterval);
-            resultStatus.style.visibility = "hidden"
-            resultStatusMessage.textContent = "";
+            resultStatus.hidden = "true";
+            resultStatusMessage.innerHTML = "";
             }
     }, 1000);
-
-    resultMessageTime = 1;
-
+    resultMessageTime = 2;
 };
 
+// If the user's choice matches with the answer, it goes through iteration to proceed to the next questions. Before proceeding to next questions, it checks if the question is the last quesion or not. 
+function nextQuestion(event) {
+    if (event.target.matches("button")) {
+        var choice = event.target.textContent;
+        
+        if (questionsArrIndex === questionsArr.length -1) {
+            answerVerification(choice);
+            endOfQuiz = true;
+        } else {
+            answerVerification(choice);
+            questionsArrIndex++;
+            questionShow(questionsArrIndex);
+        }
+    }
+}
 
-
-// End Quiz
-
-function quizDone () {
-    quizPage.style.visibility = "hidden";
-    resultPage.style.visibility = "visible";
+// This function allows the quiz to end WHEN the time runs out or the user completes answering all questions. Then, shows the result page with the score.
+function quizDone() {
+    quizPage.hidden = "true";
+    resultPage.removeAttribute("hidden");
     userScore.textContent = timeLeft;
 }
 
-startBtn.addEventListener("click", startQuiz);
-quizPage.addEventListener("click", function(event) {
-    var element = event.target;
-
-    if (element.matches("button")) {
-        var choice = element.textContent;
-        
-        if (choice === questionsArr[questionsArrIndex].answer) {
-            score++;
-
+// This should have stored data in local storage but this lines of code are not working properly. 
+    function saveUserScores(event) {
+        event.preventDefault();
+        var initials = userInitial.value;
+        if (initials === null) {
+            alert("Please type valid initial.");
+        } else {
+            var finalScore = new Object();
+            finalScore.initials = initials;
+            finalScore.score = timeLeft;
+            var scoreDatas = localStorage.getItem("scoreDatas");
+            if (scoreDatas === null) {
+                scoreDatas = [];
+            } else {
+                scoreDatas = JSON.parse(scoreDatas);
+            }
+            scoreDatas.push(finalScore);
+            var newData = JSON.stringify(scoreDatas);
+            localStorage.setItem("scoreDatas", newData);
+            window.location.replace("scoreboard.html");
         }
-        
     }
-});
 
-resultPage.hidden = true;
-resultStatus.hidden = true;
+// This allows to start the quiz by clicking the 'start quiz' button.
+startBtn.addEventListener("click", startQuiz);
+// This allows to proceed to the next question when user clicks their choice.
+quizPage.addEventListener("click", nextQuestion);
+// This allows to save the user's data into the local storage.
+submitBtn.addEventListener("submit", saveUserScores);
+
